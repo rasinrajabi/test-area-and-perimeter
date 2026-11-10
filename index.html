@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Площадь и периметр — тест</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Manrope','Segoe UI',system-ui,sans-serif;
+  background:linear-gradient(160deg,#fef3ff 0%,#eef2ff 50%,#ecfeff 100%);
+  background-attachment:fixed;
+  color:#1e1b4b;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+button{font-family:inherit;cursor:pointer}
+
+/* ===== START ===== */
+#start{align-items:center;justify-content:center;padding:24px}
+.start-card{
+  background:#fff;
+  border-radius:28px;
+  padding:48px 40px;
+  max-width:520px;width:100%;
+  box-shadow:0 20px 60px -20px rgba(124,58,237,.35), 0 0 0 1px rgba(124,58,237,.06);
+  text-align:center;
+}
+.start-icon{
+  width:84px;height:84px;margin:0 auto 22px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#a78bfa,#8b5cf6);
+  display:grid;place-items:center;
+  font-size:42px;
+  box-shadow:0 12px 30px -8px rgba(139,92,246,.55);
+}
+.start-title{
+  font-size:34px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px;
+  background:linear-gradient(135deg,#7c3aed,#db2777);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.start-sub{color:#6b6890;font-size:16px;line-height:1.55;margin-bottom:28px}
+.start-info{display:flex;gap:12px;margin-bottom:28px;text-align:left}
+.info-item{flex:1;background:#faf5ff;border:1px solid #f0e4ff;border-radius:14px;padding:14px 16px}
+.info-item .label{font-size:11px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.info-item .val{font-size:16px;font-weight:800;color:#1e1b4b}
+.name-input{
+  width:100%;padding:14px 18px;border-radius:14px;
+  border:2px solid #e9e4f7;font-family:inherit;font-size:16px;font-weight:600;
+  color:#1e1b4b;outline:none;transition:all .2s;margin-bottom:16px;background:#fdfcff;
+}
+.name-input:focus{border-color:#a78bfa;background:#fff;box-shadow:0 0 0 4px rgba(167,139,250,.12)}
+.name-input::placeholder{color:#a8a3c4;font-weight:500}
+.btn{
+  width:100%;padding:16px 24px;border-radius:16px;border:none;
+  font-family:inherit;font-size:17px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,#8b5cf6,#7c3aed);
+  box-shadow:0 8px 24px -6px rgba(124,58,237,.6);
+  transition:all .2s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px -6px rgba(124,58,237,.7)}
+.btn:active{transform:translateY(0)}
+
+/* ===== TEST ===== */
+#test{overflow-y:auto}
+.test-header{
+  padding:20px 24px 16px;background:#fff;border-bottom:1px solid #f0e9f8;
+  position:sticky;top:0;z-index:10;
+}
+.test-header-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:16px}
+.timer-block{flex:1}
+.timer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.timer-label{font-size:12px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:.06em}
+.timer-value{font-size:22px;font-weight:800;color:#1e1b4b;font-variant-numeric:tabular-nums;transition:color .3s}
+.timer-value.low{color:#dc2626}
+.timer-bar{height:10px;background:#f0e9f8;border-radius:99px;overflow:hidden}
+.timer-fill{
+  height:100%;width:100%;border-radius:99px;
+  background:linear-gradient(90deg,#22c55e,#10b981,#14b8a6);
+  transition:width .1s linear, background .3s;
+}
+.timer-fill.low{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.score-chip{
+  background:#faf5ff;border:1px solid #e9e4f7;border-radius:14px;
+  padding:8px 18px;text-align:center;min-width:90px;
+}
+.score-chip .lbl{font-size:10.5px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:.06em}
+.score-chip .num{font-size:20px;font-weight:800;color:#7c3aed;font-variant-numeric:tabular-nums}
+
+.test-main{
+  flex:1;padding:24px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;
+}
+.q-card{
+  background:#fff;border-radius:28px;padding:32px;max-width:720px;width:100%;
+  box-shadow:0 20px 50px -20px rgba(124,58,237,.25), 0 0 0 1px rgba(124,58,237,.06);
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  transition:box-shadow .2s, border-color .2s;
+  border:2px solid transparent;
+}
+.q-card.correct{border-color:#86efac;box-shadow:0 20px 50px -20px rgba(34,197,94,.35)}
+.q-card.wrong{border-color:#fca5a5;box-shadow:0 20px 50px -20px rgba(239,68,68,.35)}
+.q-badge{padding:8px 20px;border-radius:99px;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.q-badge.area{background:#f0fdfa;color:#0d9488;border:1.5px solid #99f6e4}
+.q-badge.perimeter{background:#fffbeb;color:#c2410c;border:1.5px solid #fcd34d}
+.rect-svg{max-width:100%;height:auto;display:block}
+.answer-row{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap}
+.answer-label{font-size:32px;font-weight:800;color:#6b6890}
+.answer-field{
+  display:inline-flex;align-items:center;background:#fdfcff;
+  border:2.5px solid #e9e4f7;border-radius:16px;padding:4px 16px 4px 8px;
+  transition:all .2s;
+}
+.answer-field:focus-within{border-color:#a78bfa;background:#fff;box-shadow:0 0 0 4px rgba(167,139,250,.12)}
+.answer-field.correct{border-color:#22c55e;background:#f0fdf4;box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+.answer-field.wrong{border-color:#ef4444;background:#fef2f2;box-shadow:0 0 0 4px rgba(239,68,68,.15);animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.answer-field input{
+  width:100px;background:transparent;border:none;outline:none;
+  font-family:inherit;font-weight:800;font-size:36px;text-align:center;
+  color:#1e1b4b;padding:4px 0;
+}
+.answer-field input::placeholder{color:#d4cfe8}
+.answer-field .unit{font-size:20px;font-weight:800;color:#8b5cf6;margin-left:4px}
+.answer-submit{
+  padding:14px 26px;border-radius:14px;border:none;
+  background:#7c3aed;color:#fff;font-weight:800;font-size:15px;transition:all .15s;
+}
+.answer-submit:hover{background:#6d28d9}
+.answer-submit:disabled{opacity:.4;cursor:not-allowed}
+.feedback-pop{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  padding:20px 40px;border-radius:20px;font-size:26px;font-weight:800;
+  z-index:100;pointer-events:none;text-align:center;max-width:90vw;
+  animation:popFade 1.3s ease-out forwards;
+}
+@keyframes popFade{
+  0%{opacity:0;transform:translate(-50%,-30%) scale(.8)}
+  20%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
+  60%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-70%) scale(.95)}
+}
+.feedback-pop.ok{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 20px 50px -10px rgba(34,197,94,.6)}
+.feedback-pop.bad{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 20px 50px -10px rgba(239,68,68,.6)}
+.q-counter{
+  position:absolute;top:24px;left:50%;transform:translateX(-50%);
+  font-size:13px;font-weight:700;color:#8b5cf6;background:#faf5ff;
+  padding:6px 14px;border-radius:99px;border:1px solid #e9e4f7;letter-spacing:.02em;
+}
+.finish-btn{
+  position:absolute;bottom:24px;right:24px;padding:10px 18px;border-radius:12px;
+  background:#fff;border:1.5px solid #e9e4f7;font-family:inherit;
+  font-size:13px;font-weight:700;color:#6b6890;transition:all .15s;
+}
+.finish-btn:hover{background:#faf5ff;color:#7c3aed;border-color:#c4b5fd}
+
+/* ===== RESULTS ===== */
+#results{padding:24px;align-items:center;overflow-y:auto}
+.res-card{
+  background:#fff;border-radius:28px;padding:40px;max-width:800px;width:100%;
+  box-shadow:0 20px 60px -20px rgba(124,58,237,.3), 0 0 0 1px rgba(124,58,237,.06);
+  margin:auto;
+}
+.res-head{text-align:center;margin-bottom:24px}
+.res-title{
+  font-size:34px;font-weight:800;margin-bottom:8px;letter-spacing:-.02em;
+  background:linear-gradient(135deg,#7c3aed,#db2777);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.res-name{font-size:15px;font-weight:600;color:#6b6890}
+.res-name b{color:#1e1b4b}
+.res-score{
+  text-align:center;margin:20px 0 24px;padding:28px;border-radius:20px;
+  background:linear-gradient(135deg,#faf5ff,#f0f4ff);border:1px solid #e9e4f7;
+}
+.res-score .big{
+  font-size:64px;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,#7c3aed,#db2777);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.res-score .lbl{font-size:13px;font-weight:700;color:#6b6890;text-transform:uppercase;letter-spacing:.08em;margin-top:8px}
+.res-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+.stat-box{background:#faf5ff;border:1px solid #f0e4ff;border-radius:16px;padding:16px;text-align:center}
+.stat-box .v{font-size:24px;font-weight:800;color:#1e1b4b;font-variant-numeric:tabular-nums}
+.stat-box .l{font-size:11px;font-weight:700;color:#8b5cf6;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.res-section-title{
+  font-size:18px;font-weight:800;color:#1e1b4b;margin:32px 0 16px;
+  padding-bottom:10px;border-bottom:2px solid #f0e9f8;
+}
+.review-list{display:flex;flex-direction:column;gap:8px}
+.review-item{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  background:#fdfcff;border:1.5px solid #f0e9f8;border-radius:12px;font-size:14px;
+}
+.review-item.ok{border-color:#bbf7d0;background:#f0fdf4}
+.review-item.bad{border-color:#fecaca;background:#fef2f2}
+.review-item.un{border-color:#fde68a;background:#fffbeb}
+.review-num{font-weight:800;color:#8b5cf6;min-width:24px}
+.review-type{font-weight:700;color:#6b6890;min-width:70px}
+.review-text{font-weight:600;color:#1e1b4b;flex:1}
+.review-given{font-weight:800;color:#6b6890;margin-left:auto;text-align:right}
+.review-item.ok .review-given{color:#16a34a}
+.review-item.bad .review-given{color:#dc2626}
+.review-item.un .review-given{color:#b45309}
+.review-time{font-weight:600;color:#8b5cf6;font-variant-numeric:tabular-nums;min-width:50px;text-align:right;font-size:13px}
+.res-actions{display:flex;gap:12px;margin-top:32px}
+.btn-secondary{
+  flex:1;padding:14px;border-radius:14px;border:2px solid #e9e4f7;
+  background:#fff;color:#1e1b4b;font-family:inherit;font-weight:700;
+  font-size:15px;transition:all .15s;
+}
+.btn-secondary:hover{background:#faf5ff;border-color:#c4b5fd}
+.no-mistakes-banner{
+  padding:20px;border-radius:14px;background:#f0fdf4;
+  border:1.5px solid #bbf7d0;color:#16a34a;font-weight:700;text-align:center;
+}
+
+@media (max-width:640px){
+  .start-card,.res-card{padding:28px 20px}
+  .start-title{font-size:26px}
+  .res-title{font-size:26px}
+  .res-stats{grid-template-columns:repeat(2,1fr)}
+  .test-main{padding:16px}
+  .q-card{padding:20px;gap:16px}
+  .answer-label{font-size:26px}
+  .answer-field input{font-size:30px;width:80px}
+  .res-score .big{font-size:48px}
+  .review-item{flex-wrap:wrap;gap:6px}
+  .review-given{margin-left:0;width:100%;text-align:left}
+  .review-time{min-width:0}
+  .feedback-pop{font-size:18px;padding:16px 22px}
+}
+
+@media print{
+  @page{size:A4;margin:15mm}
+  body{background:#fff !important}
+  .screen{display:none !important}
+  #results{display:block !important;padding:0}
+  .res-actions,.finish-btn{display:none !important}
+  .res-card{box-shadow:none;padding:0;border-radius:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section id="start" class="screen active">
+  <div class="start-card">
+    <div class="start-icon">📐</div>
+    <h1 class="start-title">Площадь и периметр</h1>
+    <p class="start-sub">Проверь себя! Отвечай на вопросы о площади и периметре прямоугольника. У тебя есть 2 минуты — постарайся ответить как можно больше.</p>
+    <div class="start-info">
+      <div class="info-item"><div class="label">Время</div><div class="val">2 минуты</div></div>
+      <div class="info-item"><div class="label">Задания</div><div class="val">Смешанные</div></div>
+    </div>
+    <input type="text" class="name-input" id="nameInput" placeholder="Введи своё имя (необязательно)" maxlength="40">
+    <button class="btn" id="startBtn">Начать тест →</button>
+  </div>
+</section>
+
+<!-- TEST -->
+<section id="test" class="screen">
+  <div class="test-header">
+    <div class="test-header-inner">
+      <div class="timer-block">
+        <div class="timer-top">
+          <div class="timer-label">Осталось времени</div>
+          <div class="timer-value" id="timerValue">2:00</div>
+        </div>
+        <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+      </div>
+      <div class="score-chip">
+        <div class="lbl">Баллы</div>
+        <div class="num" id="scoreNum">0</div>
+      </div>
+    </div>
+  </div>
+  <div class="test-main">
+    <div class="q-counter" id="qCounter">Задание 1</div>
+    <div class="q-card" id="qCard">
+      <div class="q-badge area" id="qBadge">Площадь</div>
+      <div id="rectWrap"></div>
+      <div class="answer-row">
+        <div class="answer-label" id="answerLabel">S =</div>
+        <div class="answer-field" id="answerField">
+          <input type="text" id="answerInput" inputmode="numeric" autocomplete="off" placeholder="?">
+          <span class="unit" id="answerUnit">см²</span>
+        </div>
+        <button class="answer-submit" id="submitBtn">Ответить</button>
+      </div>
+    </div>
+    <button class="finish-btn" id="finishBtn">Завершить</button>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="screen">
+  <div class="res-card">
+    <div class="res-head">
+      <h1 class="res-title">Тест завершён!</h1>
+      <div class="res-name" id="resName"></div>
+    </div>
+    <div class="res-score">
+      <div class="big" id="resScore">0</div>
+      <div class="lbl">Баллов</div>
+    </div>
+    <div class="res-stats" id="resStats"></div>
+    <h2 class="res-section-title">Разбор ответов</h2>
+    <div class="review-list" id="reviewList"></div>
+    <div class="res-actions">
+      <button class="btn-secondary" id="againBtn">Пройти ещё раз</button>
+      <button class="btn" style="flex:1" id="printBtn">Сохранить PDF</button>
+    </div>
+  </div>
+</section>
+
+<script>
+const MIN_SIDE = 2, MAX_SIDE = 12;
+const TEST_TIME = 120000;
+
+const $ = id => document.getElementById(id);
+
+let running = false, submitting = false;
+let currentQ = null, lastQKey = null;
+let score = 0, correctCount = 0, wrongCount = 0, totalAnswered = 0;
+let log = [];
+let remainingMs = 0, lastTickTime = 0, qStartTime = 0, rafId = null;
+let questionNum = 0;
+let playerName = '';
+
+function rand(min, max){ return min + Math.floor(Math.random() * (max - min + 1)); }
+function fmtClock(ms){
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+function fmtSec(ms){ return (ms / 1000).toFixed(1).replace('.', ',') + ' с'; }
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function makeQuestion(){
+  let q, guard = 0;
+  do {
+    const a = rand(MIN_SIDE, MAX_SIDE);
+    let b = rand(MIN_SIDE, MAX_SIDE);
+    let g = 0;
+    while (b === a && g++ < 50) b = rand(MIN_SIDE, MAX_SIDE);
+    const type = Math.random() < .5 ? 'area' : 'perimeter';
+    q = {
+      type, a, b,
+      answer: type === 'area' ? a * b : 2 * (a + b),
+      text: a + ' × ' + b
+    };
+    q.key = type + '_' + Math.min(a,b) + '_' + Math.max(a,b);
+    guard++;
+  } while (q.key === lastQKey && guard < 60);
+  lastQKey = q.key;
+  return q;
+}
+
+function buildRectangleSVG(a, b, type){
+  const HORIZ = Math.max(a, b), VERT = Math.min(a, b);
+  const scale = Math.min(220 / HORIZ, 30);
+  const w = HORIZ * scale, h = VERT * scale;
+  const padL = 64, padT = 40, padR = 24, padB = 20;
+  const W = w + padL + padR, H = h + padT + padB;
+  const rx = padL, ry = padT;
+  let grid = '';
+  if (type === 'area' && HORIZ <= 14 && VERT <= 14){
+    for (let i = 1; i < HORIZ; i++){
+      const x = rx + i * scale;
+      grid += `<line x1="${x}" y1="${ry}" x2="${x}" y2="${ry + h}" stroke="#99f6e4" stroke-width="1" opacity=".55"/>`;
+    }
+    for (let j = 1; j < VERT; j++){
+      const y = ry + j * scale;
+      grid += `<line x1="${rx}" y1="${y}" x2="${rx + w}" y2="${y}" stroke="#99f6e4" stroke-width="1" opacity=".55"/>`;
+    }
+  }
+  const stroke = type === 'area' ? '#0d9488' : '#ea580c';
+  const fill = type === 'area' ? '#ccfbf1' : '#ffedd5';
+  const dash = type === 'perimeter' ? ' stroke-dasharray="10 6"' : '';
+  return `<svg class="rect-svg" xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <rect x="${rx}" y="${ry}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}" stroke-width="3" rx="3"${dash}/>
+    ${grid}
+    <text x="${rx + w/2}" y="${ry - 12}" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="18" fill="#475569">${HORIZ} см</text>
+    <text x="${rx - 10}" y="${ry + h/2}" text-anchor="end" dominant-baseline="middle" font-family="Manrope, sans-serif" font-weight="800" font-size="18" fill="#475569">${VERT} см</text>
+  </svg>`;
+}
+
+function startTest(){
+  playerName = $('nameInput').value.trim();
+  score = 0; correctCount = 0; wrongCount = 0; totalAnswered = 0;
+  log = []; questionNum = 0; submitting = false; lastQKey = null;
+  remainingMs = TEST_TIME;
+  $('scoreNum').textContent = '0';
+  $('timerValue').textContent = fmtClock(TEST_TIME);
+  $('timerValue').classList.remove('low');
+  $('timerFill').style.width = '100%';
+  $('timerFill').classList.remove('low');
+  showScreen('test');
+  running = true;
+  nextQuestion();
+  runTimer();
+  setTimeout(() => $('answerInput').focus(), 100);
+}
+
+function nextQuestion(){
+  if (!running) return;
+  questionNum++;
+  currentQ = makeQuestion();
+  qStartTime = performance.now();
+  $('qCounter').textContent = 'Задание ' + questionNum;
+  $('qBadge').textContent = currentQ.type === 'area' ? 'Площадь' : 'Периметр';
+  $('qBadge').className = 'q-badge ' + currentQ.type;
+  $('answerLabel').textContent = currentQ.type === 'area' ? 'S =' : 'P =';
+  $('answerUnit').textContent = currentQ.type === 'area' ? 'см²' : 'см';
+  $('rectWrap').innerHTML = buildRectangleSVG(currentQ.a, currentQ.b, currentQ.type);
+  $('qCard').classList.remove('correct', 'wrong');
+  $('answerField').classList.remove('correct', 'wrong');
+  $('answerInput').value = '';
+  $('answerInput').readOnly = false;
+  $('submitBtn').disabled = false;
+  $('answerInput').focus();
+}
+
+function submitAnswer(){
+  if (!running || submitting || !currentQ) return;
+  const raw = $('answerInput').value.trim();
+  if (raw === '') return;
+  submitting = true;
+  const val = parseInt(raw, 10);
+  const ok = val === currentQ.answer;
+  const spent = performance.now() - qStartTime;
+
+  log.push({ type: currentQ.type, a: currentQ.a, b: currentQ.b, answer: currentQ.answer, given: val, ms: spent, ok, num: questionNum });
+  totalAnswered++;
+  if (ok) correctCount++; else wrongCount++;
+
+  $('answerInput').readOnly = true;
+  $('submitBtn').disabled = true;
+
+  if (ok){
+    const pts = 10 + (spent < 4000 ? 5 : 0);
+    score += pts;
+    $('answerField').classList.add('correct');
+    $('qCard').classList.add('correct');
+    showFeedback('Верно! +' + pts, true);
+  } else {
+    score += 0;
+    $('answerField').classList.add('wrong');
+    $('qCard').classList.add('wrong');
+    const formula = currentQ.type === 'area'
+      ? currentQ.a + ' × ' + currentQ.b + ' = ' + currentQ.answer + ' см²'
+      : '2 × (' + currentQ.a + ' + ' + currentQ.b + ') = ' + currentQ.answer + ' см';
+    showFeedback('Правильно: ' + formula, false);
+  }
+  $('scoreNum').textContent = score;
+
+  setTimeout(() => {
+    if (!running) return;
+    submitting = false;
+    nextQuestion();
+  }, ok ? 700 : 1700);
+}
+
+function showFeedback(text, ok){
+  const el = document.createElement('div');
+  el.className = 'feedback-pop ' + (ok ? 'ok' : 'bad');
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+function runTimer(){
+  lastTickTime = performance.now();
+  function tick(now){
+    if (!running) return;
+    const dt = now - lastTickTime;
+    lastTickTime = now;
+    remainingMs -= dt;
+    if (remainingMs <= 0){
+      remainingMs = 0;
+      $('timerFill').style.width = '0%';
+      $('timerValue').textContent = '0:00';
+      endTest();
+      return;
+    }
+    const pct = remainingMs / TEST_TIME * 100;
+    $('timerFill').style.width = pct + '%';
+    $('timerValue').textContent = fmtClock(remainingMs);
+    if (remainingMs < 30000){
+      $('timerFill').classList.add('low');
+      $('timerValue').classList.add('low');
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function endTest(){
+  if (!running) return;
+  running = false;
+  if (rafId){ cancelAnimationFrame(rafId); rafId = null; }
+  if (currentQ && !submitting && $('answerInput').value.trim() === ''){
+    log.push({ type: currentQ.type, a: currentQ.a, b: currentQ.b, answer: currentQ.answer,
+               given: null, ms: performance.now() - qStartTime, ok: false, num: questionNum, unanswered: true });
+  }
+  renderResults();
+  showScreen('results');
+}
+
+function renderResults(){
+  $('resName').innerHTML = playerName ? 'Ученик: <b>' + escapeHtml(playerName) + '</b>' : '';
+  $('resScore').textContent = score;
+
+  const accuracy = totalAnswered > 0 ? Math.round(correctCount / totalAnswered * 100) : 0;
+  const answered = log.filter(l => l.given !== null);
+  const avgTime = answered.length ? answered.reduce((s, l) => s + l.ms, 0) / answered.length : 0;
+
+  $('resStats').innerHTML =
+    '<div class="stat-box"><div class="v">' + correctCount + '</div><div class="l">Верно</div></div>' +
+    '<div class="stat-box"><div class="v">' + wrongCount + '</div><div class="l">Ошибок</div></div>' +
+    '<div class="stat-box"><div class="v">' + accuracy + '%</div><div class="l">Точность</div></div>' +
+    '<div class="stat-box"><div class="v">' + (answered.length ? fmtSec(avgTime) : '—') + '</div><div class="l">Ср. время</div></div>';
+
+  if (log.length === 0){
+    $('reviewList').innerHTML = '<div class="no-mistakes-banner">Не успел ответить ни на один вопрос 😔</div>';
+    return;
+  }
+
+  $('reviewList').innerHTML = log.map((l, i) => {
+    const cls = l.given === null ? 'un' : (l.ok ? 'ok' : 'bad');
+    const typeLabel = l.type === 'area' ? 'Площадь' : 'Периметр';
+    const unit = l.type === 'area' ? 'см²' : 'см';
+    let given;
+    if (l.ok) given = '✓ ' + l.given + ' ' + unit;
+    else if (l.given === null) given = 'не отвечено';
+    else given = '✗ ' + l.given + ' → ' + l.answer + ' ' + unit;
+    return '<div class="review-item ' + cls + '">' +
+      '<span class="review-num">' + (i+1) + '.</span>' +
+      '<span class="review-type">' + typeLabel + '</span>' +
+      '<span class="review-text">' + l.a + ' × ' + l.b + ' = ?</span>' +
+      '<span class="review-given">' + given + '</span>' +
+      '<span class="review-time">' + fmtSec(l.ms) + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+/* ===== EVENTS ===== */
+$('startBtn').onclick = startTest;
+$('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') startTest(); });
+$('submitBtn').onclick = submitAnswer;
+$('finishBtn').onclick = () => {
+  if (!running) return;
+  if (confirm('Завершить тест досрочно?')) endTest();
+};
+$('answerInput').addEventListener('input', () => {
+  $('answerInput').value = $('answerInput').value.replace(/[^\d]/g, '').slice(0, 4);
+});
+$('answerInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter'){ e.preventDefault(); submitAnswer(); }
+});
+$('againBtn').onclick = () => {
+  showScreen('start');
+  $('nameInput').value = playerName;
+  $('nameInput').focus();
+};
+$('printBtn').onclick = () => window.print();
+</script>
+</body>
+</html>
